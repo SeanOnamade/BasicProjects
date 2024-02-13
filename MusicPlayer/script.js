@@ -27,6 +27,8 @@ for (const link of links) {
     link.addEventListener('click', setSong)
 }
 
+document.querySelector('#currentSong').innerText = "Choose a Song!"
+
 function setSong(e) {
     // console.log(e);
     document.querySelector("#headphones").classList.remove("pulse");
@@ -37,17 +39,18 @@ function setSong(e) {
 
     player.load();
     player.play();
+    document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     document.querySelector("#headphones").classList.add("pulse");
 }
 
-function playAudio() {
-    if (player.readyState) {
+function togglePlayPause() {
+    if (player.paused && player.readyState) {
         player.play();
+        document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
+    } else {
+        player.pause();
+        document.getElementById("playPauseIcon").innerHTML = "&#9658;";
     }
-}
-
-function pauseAudio() {
-    player.pause();
 }
 
 const slider = document.getElementById("volumeSlider");
@@ -75,5 +78,10 @@ function updateProgress() {
     // console.log(player.currentTime);
     // console.log(player.duration);
 }
+
+player.addEventListener('ended', function() {
+    document.querySelector('#currentSong').innerText = "Choose a Song!";
+    document.getElementById("playPauseIcon").innerHTML = "&#9658;";
+});
 
 
