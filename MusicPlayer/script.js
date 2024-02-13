@@ -84,4 +84,61 @@ player.addEventListener('ended', function() {
     document.getElementById("playPauseIcon").innerHTML = "&#9658;";
 });
 
+const progressBar = document.getElementById("progress");
+let isDragging = false;
+let wasPlayingBeforeDrag = false;
+
+function moveProgressBar(event) {
+    const rect = progressBar.getBoundingClientRect(); // gets size and element
+    const totalWidth = rect.width; // gets width
+    const offsetX = event.clientX - rect.left; // this gets the mouse's ("event's") horizontal position
+    // relative to the left edge of the progress bar
+
+    const progressPercentage = offsetX / totalWidth; // calculates progress based on event's position
+    
+
+    // update the playback based on progress percentage
+    player.currentTime = player.duration * progressPercentage;
+}
+
+progressBar.addEventListener('mousedown', function(event) { // mousedown = clicking
+    isDragging = true;
+    wasPlayingBeforeDrag = !player.paused;
+    player.pause();
+    moveProgressBar(event); // update when dragging starts
+    document.addEventListener('mousemove', moveProgressBar); // update continuously while dragging
+});
+
+progressBar.addEventListener('touchstart', function(event) { // touchscreen devices
+    isDragging = true;
+    wasPlayingBeforeDrag = !player.paused;
+    player.pause();
+    moveProgressBar(event.touches[0]); // jump immediately upon touching
+    document.addEventListener('touchmove', function(touchEvent) {
+        moveProgressBar(touchEvent.touches[0]); // first touch (touches[0]) is argument
+    });
+});
+
+function stopDragging() {
+    isDragging = false;
+    if (wasPlayingBeforeDrag) {
+        player.play();
+    }
+    document.removeEventListener('mousemove', moveProgressBar);
+    document.removeEventListener('touchmove', moveProgressBar);
+}
+
+document.addEventListener('mouseup', stopDragging);
+document.addEventListener('touchend', stopDragging);
+
+// document.addEventListener('mouseup', function() {
+//     document.removeEventListener('mousemove', moveProgressBar);
+// });
+
+
+// document.addEventListener('touched', function() {
+//     document.removeEventListener('mousemove', moveProgressBar);
+// });
+
+
 
