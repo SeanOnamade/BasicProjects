@@ -38,7 +38,11 @@ img {
     /*IDs use the hashtag/pound */
     border:1px lightslategray solid;
     border-radius: 1rem;
-    padding: 1.6rem
+    padding: 1.6rem;
+}
+
+#timeDisplay {
+    padding: 1.3rem;
 }
 
 .controls_wrapper > span {

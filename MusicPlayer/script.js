@@ -60,7 +60,17 @@ slider.oninput = function(e) {
 function updateProgress() {
     if (player.currentTime > 0) { // will throw error otherwise, w/ NaN
         const progressBar = document.getElementById("progress");
-        progressBar.value = (player.currentTime / player.duration) * 100;
+        const currentTime = player.currentTime;
+        const duration = player.duration;
+
+        const formatTime = (currentTime) => {
+            const mins = Math.floor(currentTime / 60);
+            const seconds = Math.floor(currentTime % 60);
+            return `${mins}:${seconds < 10 ? '0' : ''}${seconds}`;
+        };
+
+        progressBar.value = (currentTime / duration) * 100;
+        document.getElementById("timeDisplay").innerText = `${formatTime(currentTime)} / ${formatTime(duration)}`;
     }
     // console.log(player.currentTime);
     // console.log(player.duration);
