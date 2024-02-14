@@ -85,6 +85,14 @@ progress {
     margin-bottom: 1rem;
 }
 
+progress:hover {   /* new */
+    cursor: pointer;
+}
+
+#volumeSlider:hover {   /* new */
+    cursor: pointer;
+}
+
 .pulse {
 animation: pulse;
 animation-duration: 0.4s;

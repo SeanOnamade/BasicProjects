@@ -44,7 +44,11 @@ function setSong(e) {
 }
 
 function togglePlayPause() {
-    if (player.paused && player.readyState) {
+    if (!player.readyState) {
+        console.log("Not ready state!");
+        return; 
+    }
+    if (player.paused) {
         player.play();
         document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     } else {
@@ -52,6 +56,12 @@ function togglePlayPause() {
         document.getElementById("playPauseIcon").innerHTML = "&#9658;";
     }
 }
+
+// player.addEventListener('error', function(event) {
+//     console.error('Error occurred:', event.target.error);
+//     // Handle the error (e.g., display an error message to the user)
+//     // You can also reset the player state or take other appropriate action here
+// });
 
 const slider = document.getElementById("volumeSlider");
 slider.oninput = function(e) {
@@ -98,7 +108,8 @@ function moveProgressBar(event) {
     
 
     // update the playback based on progress percentage
-    player.currentTime = player.duration * progressPercentage;
+    const newTime = player.duration * progressPercentage;
+    player.currentTime = newTime;
 }
 
 progressBar.addEventListener('mousedown', function(event) { // mousedown = clicking
@@ -120,16 +131,32 @@ progressBar.addEventListener('touchstart', function(event) { // touchscreen devi
 });
 
 function stopDragging() {
-    isDragging = false;
     if (wasPlayingBeforeDrag) {
         player.play();
     }
+    isDragging = false;
     document.removeEventListener('mousemove', moveProgressBar);
     document.removeEventListener('touchmove', moveProgressBar);
 }
 
-document.addEventListener('mouseup', stopDragging);
-document.addEventListener('touchend', stopDragging);
+// document.addEventListener('mouseup', stopDragging);
+// document.addEventListener('touchend', stopDragging);
+
+document.addEventListener('mouseup', function() {
+    if (isDragging) {
+        stopDragging();
+    }
+});
+
+document.addEventListener('touchend', function() {
+    if (isDragging) {
+        stopDragging();
+    }
+}); // using the commented code above for mouseup and touchend cause the bug. I guess the
+    // problem was that it didn't check for isDragging. isDragging must only be called when dragging
+    // is in progress. Without this check, the stopDragging function would be called unconditionally 
+    // whenever a mouseup or touchend event occurs, regardless of whether dragging was actually happening.
+    // this means that stopDragging() will continuously play the player.
 
 // document.addEventListener('mouseup', function() {
 //     document.removeEventListener('mousemove', moveProgressBar);
@@ -139,6 +166,12 @@ document.addEventListener('touchend', stopDragging);
 // document.addEventListener('touched', function() {
 //     document.removeEventListener('mousemove', moveProgressBar);
 // });
+
+player.addEventListener('error', function(event) { // does this work?
+    console.error('Error occurred:', event);
+    // Handle the error here, e.g., display an error message to the user
+    alert('An error occurred during playback. Please try again later.');
+});
 
 
 
