@@ -3,7 +3,7 @@ BasicProjects - Overview
 This repository contains many basic projects I've been working on in various languages to improve my coding abilities. I made this repository as a simple place to store these projects!
 
 # _✨Table of Contents✨_
-### 1. [Dotify](#Dotify)
+### 1. [Dotify - Music Player](#Dotify)
 ### 2. [Rock Paper Scissors](#Rock-Paper-Scissors)
 ### 3. [Tic Tac Toe](#tic-tac-toe)
 
@@ -34,11 +34,14 @@ This project was simple enough, nothing crazy. I hope to add more to it later; p
 ### Languages, softwares, and modules used
 - Python
 
-
 ### Run/Install
 
----
-going was slow at first, and required some extra research. A lot of logic was needed compared to the simple RPS game. I also had to review the rules of tic-tac-toe. 😂
+## Tic Tac Toe
+This is a simple tic tac toe game that can be played with two players on one computer. It opens an interactive window, and the game can be replayed indefinitely.
+<!--- Add image --->
+
+### What did I learn? What challenges were there?
+The Tkinter module was totally new to me, and I was pleasantly surprised by its capabilities. Getting things going was slow at first, and required some extra research. A lot of logic was needed compared to the simple RPS game. I also had to review the rules of tic-tac-toe. 😂
 
 ### Languages, softwares, and modules used
 - Python
@@ -49,9 +52,3 @@ going was slow at first, and required some extra research. A lot of logic was ne
 ---
 If you've gotten to the end of this, I hope you've liked my projects!
 
-## Tic Tac Toe
-This is a simple tic tac toe game that can be played with two players on one computer. It opens an interactive window, and the game can be replayed indefinitely.
-<!--- Add image --->
-
-### What did I learn? What challenges were there?
-The Tkinter module was totally new to me, and I was pleasantly surprised by its capabilities. Getting things 
