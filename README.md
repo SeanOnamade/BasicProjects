@@ -29,6 +29,14 @@ Reviewing event listeners was a bit of a pain. Making the pause/play icon pulse 
 
 ### Run/Install
 
+To clone the repository, open a terminal and enter the following command:
+```
+git clone https://github.com/SeanOnamade/BasicProjects/MusicPlayer
+```
+Open the project in VSCode. Navigate to index.html and right click, then select "Open with Live Server" (this requires the [Live Server extension](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer), which is handy for opening sites.
+
+
+
 ---
 
 ## Rock Paper Scissors
