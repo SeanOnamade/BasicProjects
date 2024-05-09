@@ -69,6 +69,8 @@ img {
 li {
     cursor: pointer;
     padding: 1.5rem;
+    transition: all 0.7s ease;
+    border-radius: 10px;
 }
 
 li:hover {
@@ -94,8 +96,8 @@ progress:hover {   /* new */
 }
 
 .pulse {
-animation: pulse;
-animation-duration: 0.4s;
+    animation: pulse;
+    animation-duration: 0.4s;
 }
 
 @keyframes pulse {

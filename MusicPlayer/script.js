@@ -49,19 +49,20 @@ function togglePlayPause() {
         return; 
     }
     if (player.paused) {
+        document.querySelector("#headphones").classList.remove("pulse"); // playing it will prep pulse
         player.play();
         document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     } else {
         player.pause();
         document.getElementById("playPauseIcon").innerHTML = "&#9658;";
     }
+    if (!player.paused) { // if playing, pulse
+        document.querySelector("#headphones").classList.add("pulse"); // if we just played it, it will play
+        // this is after playing has actually occurred. We can only add after play call is complete
+    } else { // otherwise, don't
+        document.querySelector("#headphones").classList.remove("pulse"); // remove pulse.           
+    }
 }
-
-// player.addEventListener('error', function(event) {
-//     console.error('Error occurred:', event.target.error);
-//     // Handle the error (e.g., display an error message to the user)
-//     // You can also reset the player state or take other appropriate action here
-// });
 
 const slider = document.getElementById("volumeSlider");
 slider.oninput = function(e) {
@@ -85,8 +86,6 @@ function updateProgress() {
         progressBar.value = (currentTime / duration) * 100;
         document.getElementById("timeDisplay").innerText = `${formatTime(currentTime)} / ${formatTime(duration)}`;
     }
-    // console.log(player.currentTime);
-    // console.log(player.duration);
 }
 
 player.addEventListener('ended', function() {
@@ -106,7 +105,6 @@ function moveProgressBar(event) {
 
     const progressPercentage = offsetX / totalWidth; // calculates progress based on event's position
     
-
     // update the playback based on progress percentage
     const newTime = player.duration * progressPercentage;
     player.currentTime = newTime;
@@ -162,14 +160,12 @@ document.addEventListener('touchend', function() {
 //     document.removeEventListener('mousemove', moveProgressBar);
 // });
 
-
 // document.addEventListener('touched', function() {
 //     document.removeEventListener('mousemove', moveProgressBar);
 // });
 
 player.addEventListener('error', function(event) { // does this work?
     console.error('Error occurred:', event);
-    // Handle the error here, e.g., display an error message to the user
     alert('An error occurred during playback. Please try again later.');
 });
 
