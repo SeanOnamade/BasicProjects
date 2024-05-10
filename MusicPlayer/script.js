@@ -1,19 +1,46 @@
 const songs = [
-    "Cameraman (140bpm).mp3",
-    "Chainsaw Man Opening - Kick Back [8 Bit VRC6] (1).mp3",
-    "h0kioirc.mp3",
-    "Kitsune - Rock My Emotions.mp3",
-    "ROBLOX Music - Crossroad Times.mp3",
-    "song1.wav",
-];
+    { title: "Cameraman", artist: "Kelton ft. Sean" },
+    { title: "Chainsaw Man Opening - Kick Back [8 Bit VRC6]", artist: "MegaBaz" },
+    { title: "Untitled1", artist: "Unknown Artist" },
+    { title: "Rock My Emotions", artist: "Kitsune" },
+    { title: "ROBLOX Music - Crossroad Times", artist: "ROBLOX" },
+    { title: "Untitled2", artist: "Sean" },
+    { title: "April 13", artist: "Sean" },
+    { title: "April 14", artist: "Sean" },
+    { title: "April 15", artist: "Sean" },
+    { title: "Oleana Battle Music - Pokémon Sword & Shield", artist: "Gamefreak" },
+    { title: "Giorno's Theme (Medieval Style)", artist: "Mystic Zaru" },
+    { title: "Faerie's Aire and Death Waltz", artist: "superrainbowderp" },
+    { title: "Eccentricity", artist: "Sean" },
+    { title: "Team Fortress 2 -- Upgrade Station", artist: "Valve Studio Orchestra" },
+    { title: "TOKYO DRIFT FREESTYLE", artist: "bbno$" },
+    { title: "Sniper Remix Number One TF2", artist: "Mastgrr" },
+    { title: "Team Fortress 2 -- Your Team Lost", artist: "Valve Studio Orchestra" },
+    { title: "Flame On {Human Torch Song}", artist: "Hitman's Beatmaker and Oll Korrect" },
+    { title: "Level 6 -- City", artist: "Rolling Sky" },
+    { title: "Everywhere At The End Of DaBaby", artist: "ynk" },
+    { title: "Playing with Christmas", artist: "Mastgrr" },
+    { title: "Wii Theme but its September", artist: "Mr Rock" },
+].sort((a, b) => a.title.localeCompare(b.title));
+
+// https://www.textfixer.com/tools/alphabetical-order.php
 
 const player = document.getElementById("player")
+let sortByTitle = true;
 
 function createSongList() {
+    const sortedSongs = songs.sort(sortSongs);
     const list = document.createElement("ol");
-    for (let i = 0; i < songs.length; i++) {
+    // for (let i = 0; i < songs.length; i++) {
+    for (let i = 0; i < sortedSongs.length; i++) {
         const item = document.createElement("li");
-        item.appendChild(document.createTextNode(songs[i]));
+        const title = document.createElement("span"); // song title
+        title.textContent = songs[i].title;
+        const artist = document.createElement("span");
+        artist.textContent = ` - ${songs[i].artist}`;
+        // item.appendChild(document.createTextNode(songs[i]));
+        item.appendChild(title);
+        item.appendChild(artist);
         list.appendChild(item);
     }
     return list;
@@ -22,7 +49,7 @@ function createSongList() {
 const songList = document.getElementById("songList")
 songList.appendChild(createSongList());
 
-const links = document.querySelectorAll('li');
+const links = document.querySelectorAll('li, li span:first-child');
 for (const link of links) {
     link.addEventListener('click', setSong)
 }
@@ -33,12 +60,18 @@ function setSong(e) {
     // console.log(e);
     document.querySelector("#headphones").classList.remove("pulse");
     const source = document.getElementById("source");
-    source.src = "songs/" + e.target.innerText;
+
+    const targetLi = e.target.tagName === 'SPAN' ? e.target.parentElement : e.target;
+    const songTitle = targetLi.querySelector('span:first-child').textContent;
+    // source.src = "songs/" + e.target.innerText;
+    source.src = "songs/" + songTitle + ".mp3";
 
     document.querySelector('#currentSong').innerText = `Now Playing: ${e.target.innerText}`
 
     player.load();
     player.play();
+    document.querySelector('#currentSong').classList.remove("paused");
+    document.querySelector('#currentSong').style.fontStyle = 'italic';
     document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     document.querySelector("#headphones").classList.add("pulse");
 }
@@ -51,9 +84,13 @@ function togglePlayPause() {
     if (player.paused) {
         document.querySelector("#headphones").classList.remove("pulse"); // playing it will prep pulse
         player.play();
+        document.querySelector('#currentSong').style.fontStyle = 'italic';
+        document.querySelector('#currentSong').classList.remove("paused");
         document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     } else {
         player.pause();
+        document.querySelector('#currentSong').style.fontStyle = 'normal';
+        document.querySelector('#currentSong').classList.add("paused");
         document.getElementById("playPauseIcon").innerHTML = "&#9658;";
     }
     if (!player.paused) { // if playing, pulse
@@ -89,7 +126,10 @@ function updateProgress() {
 }
 
 player.addEventListener('ended', function() {
-    document.querySelector('#currentSong').innerText = "Choose a Song!";
+    var currentSong = document.querySelector('#currentSong');
+    currentSong.innerText = "Choose a Song!";
+    currentSong.style.fontStyle = 'normal';
+    currentSong.classList.add("paused");
     document.getElementById("playPauseIcon").innerHTML = "&#9658;";
 });
 
@@ -109,6 +149,34 @@ function moveProgressBar(event) {
     const newTime = player.duration * progressPercentage;
     player.currentTime = newTime;
 }
+
+function toggleSort() {
+    sortByTitle = !sortByTitle;
+    const toggleButton = document.getElementById("toggleButton");
+    if (sortByTitle) {
+        toggleButton.textContent = "Sort by Artist";
+    }
+    else {
+        toggleButton.textContent = "Sort by Title";
+    }
+    songList.innerHTML = ''; // recreates the list with new sorting
+    songList.appendChild(createSongList());
+    const links = document.querySelectorAll('li, li span:first-child');
+    for (const link of links) {
+        link.addEventListener('click', setSong)
+    }
+}
+
+function sortSongs(a, b) {
+    if (sortByTitle) {
+        return a.title.localeCompare(b.title);
+    }
+    else {
+        return a.artist.localeCompare(b.artist);
+    }
+}
+
+document.getElementById("toggleButton").addEventListener('click', toggleSort);
 
 progressBar.addEventListener('mousedown', function(event) { // mousedown = clicking
     isDragging = true;
