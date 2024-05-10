@@ -46,6 +46,12 @@ h1 {
     background: radial-gradient(#2a123e, #232669);
     padding: 2rem;
     border-radius: 3rem;
+    box-shadow: rgba(240, 46, 170, 0.4) 5px 5px, 
+                rgba(240, 46, 170, 0.3) 10px 10px, 
+                rgba(240, 46, 170, 0.2) 15px 15px, 
+                rgba(240, 46, 170, 0.1) 20px 20px, 
+                rgba(240, 46, 170, 0.05) 25px 25px;
+    /* https://getcssscan.com/css-box-shadow-examples */
 }
 
 img {
@@ -193,10 +199,12 @@ progress {
     border-color: #0172af;
     box-shadow: 2px 2px 3px #0172af9a;
     opacity: 1;
+    overflow: hidden;
 } 
 
 progress:hover {
     opacity: 0.8;
+    cursor: pointer; /* redundant? */
 }
 
 
@@ -204,7 +212,7 @@ progress::-webkit-progress-bar {
     background-color: #0172af;
     border-radius: 20px;
     /* margin-bottom: 0rem; */
-    height: 3rem;
+    /* height: 3rem; */
 }
 
 progress::-webkit-progress-value {
