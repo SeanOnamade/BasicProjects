@@ -108,6 +108,38 @@ function togglePlayPause() {
     }
 }
 
+document.addEventListener('keydown', function(event) {
+    if (event.code === 'Space' && event.target === document.body) {
+        // event.target === document.body to prevent from affecting theoretical other fields
+        event.preventDefault(); // prevents default action of scrolling down
+        togglePlayPause();
+    }
+});
+
+document.addEventListener('keydown', function(event) { /* Volume changed with arrows */
+    const volumeStep = 0.1;
+    switch (event.key) {
+        case 'ArrowRight':
+            player.volume = Math.min(player.volume + volumeStep, 1);
+            updateVolumeDisplay(player.volume);
+            break;
+        case 'ArrowLeft':
+            player.volume = Math.max(player.volume - volumeStep, 0);
+            updateVolumeDisplay(player.volume);
+            break;
+        default:
+            break;
+    }
+})
+
+/* Set to true volume; LIES and says 50% otherwise, how rude */
+document.getElementById("volumeSlider").value = player.volume;
+
+function updateVolumeDisplay(volume) {
+    const volumeDisplay = document.getElementById("volumeSlider");
+    volumeDisplay.value = volume;
+}
+
 const slider = document.getElementById("volumeSlider");
 slider.oninput = function(e) {
     // console.log(e);

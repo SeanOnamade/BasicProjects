@@ -120,7 +120,7 @@ img {
 
 #songList {
     overflow: hidden;
-    text-align: left;
+    text-align: center;
     justify-content: center;
 }
 
@@ -199,7 +199,7 @@ progress {
     border-color: #0172af;
     box-shadow: 2px 2px 3px #0172af9a;
     opacity: 1;
-    overflow: hidden;
+    overflow: hidden; /* important for left overflow because apparently that's a thing haha */
 } 
 
 progress:hover {
@@ -250,6 +250,11 @@ progress:hover {
     /* height: 3.1rem; */
 }
 
+/* #toggleButton:focus {
+    outline: none;
+} */
+/* This only matters if the space bar comes into play */
+
 #toggleButton:hover {
     /* font-size: 1.4rem; */
     cursor: pointer;
@@ -279,5 +284,12 @@ progress:hover {
     body {
         max-width: 60vw; /* for when the screen is big */
         font-size: 1.8rem;
+    }
+}
+
+@media(max-width: 800px) {
+    .player {
+        /* box-shadow: none; */
+        margin-right: 20px;
     }
 }
