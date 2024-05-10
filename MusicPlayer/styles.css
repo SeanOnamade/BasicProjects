@@ -5,6 +5,27 @@ html {
     font-size: 10px;
 }
 
+#headphones {
+    margin-top: 10px;
+    animation: float 6s ease-in-out infinite;
+    animation-play-state: paused;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(-5px);
+        -webkit-filter: drop-shadow(0 7px 10px grey);
+    }
+    50% {
+        transform: translateY(5px);
+        -webkit-filter: drop-shadow(0 10px 13px rgb(68, 136, 158));
+    }
+    100% {
+        transform: translateY(-5px); 
+        -webkit-filter: drop-shadow(0 7px 10px grey);
+    }
+}
+
 
 body {
     background: linear-gradient(#74fedb, #0172af);
@@ -139,6 +160,22 @@ li {
 li:hover {
     color: black;
     background-color: #74fedb;
+    animation: float2 3s ease-in-out infinite;
+    animation-play-state: running;
+    box-shadow: rgba(240, 46, 170, 0.4) 0px 4px, rgba(240, 46, 170, 0.3) 0px 8px;
+    /* box-shadow: 5px 5px blue, 10px 10px red, 15px 15px green; */ /* COOL EFFECT */
+}
+
+@keyframes float2 {
+    0% {
+        transform: translateY(-3px);
+    }
+    50% {
+        transform: translateY(0px);
+    }
+    100% {
+        transform: translateY(-3px);
+    }
 }
 
 a {
@@ -207,6 +244,7 @@ progress:hover {
 
 #toggleButton:hover {
     /* font-size: 1.4rem; */
+    cursor: pointer;
     background-color: #0172af;
     color: white;
     box-shadow: 3px 3px 4px rgb(132, 187, 198);

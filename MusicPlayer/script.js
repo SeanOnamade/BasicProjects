@@ -8,7 +8,7 @@ const songs = [
     { title: "April 13", artist: "Sean" },
     { title: "April 14", artist: "Sean" },
     { title: "April 15", artist: "Sean" },
-    { title: "Oleana Battle Music - Pokémon Sword & Shield", artist: "Gamefreak" },
+    { title: "Oleana Battle Music -- Pokemon Sword and Shield", artist: "Gamefreak" },
     { title: "Giorno's Theme (Medieval Style)", artist: "Mystic Zaru" },
     { title: "Faerie's Aire and Death Waltz", artist: "superrainbowderp" },
     { title: "Eccentricity", artist: "Sean" },
@@ -58,19 +58,25 @@ document.querySelector('#currentSong').innerText = "Choose a Song!"
 
 function setSong(e) {
     // console.log(e);
-    document.querySelector("#headphones").classList.remove("pulse");
+    document.querySelector("#headphones").classList.remove("pulse"); /* May be outdated now */
     const source = document.getElementById("source");
 
     const targetLi = e.target.tagName === 'SPAN' ? e.target.parentElement : e.target;
     const songTitle = targetLi.querySelector('span:first-child').textContent;
+    const songArtist = targetLi.querySelector('span:last-child').textContent;
+
+    // const maxTitleLength = 35;
+    // const truncatedTitle = songTitle.length > maxTitleLength ? songTitle.substring(0, maxTitleLength) + "..." : songTitle;
     // source.src = "songs/" + e.target.innerText;
     source.src = "songs/" + songTitle + ".mp3";
 
-    document.querySelector('#currentSong').innerText = `Now Playing: ${e.target.innerText}`
+    document.querySelector('#currentSong').innerText = `Now Playing: ${songTitle} ${songArtist}`;
+    // no hypen needed because artist.textContent = ` - ${songs[i].artist}`;
 
     player.load();
     player.play();
     document.querySelector('#currentSong').classList.remove("paused");
+    document.querySelector('#headphones').style.animationPlayState = "running";
     document.querySelector('#currentSong').style.fontStyle = 'italic';
     document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     document.querySelector("#headphones").classList.add("pulse");
@@ -86,11 +92,12 @@ function togglePlayPause() {
         player.play();
         document.querySelector('#currentSong').style.fontStyle = 'italic';
         document.querySelector('#currentSong').classList.remove("paused");
+        document.querySelector('#headphones').style.animationPlayState = "running";
         document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
     } else {
         player.pause();
-        document.querySelector('#currentSong').style.fontStyle = 'normal';
         document.querySelector('#currentSong').classList.add("paused");
+        document.querySelector('#headphones').style.animationPlayState = "paused";
         document.getElementById("playPauseIcon").innerHTML = "&#9658;";
     }
     if (!player.paused) { // if playing, pulse
@@ -130,6 +137,7 @@ player.addEventListener('ended', function() {
     currentSong.innerText = "Choose a Song!";
     currentSong.style.fontStyle = 'normal';
     currentSong.classList.add("paused");
+    document.querySelector('#headphones').style.animationPlayState = "paused";
     document.getElementById("playPauseIcon").innerHTML = "&#9658;";
 });
 
