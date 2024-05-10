@@ -40,6 +40,7 @@ body {
 h1 {
     font-size: 2em; 
     text-align: center;
+    text-shadow: 2px 2px rgba(212, 39, 160, 0.641);
 }
 
 .player {
@@ -94,6 +95,7 @@ img {
     animation: scroll-left 15s linear infinite;
     white-space: nowrap;
     width: 100%;
+    text-shadow: 2px 2px rgb(212, 39, 160);
 }
 
 @keyframes scroll-left {
@@ -161,6 +163,9 @@ li {
     transition: all 0.4s ease;
     border-radius: 10px;
     list-style-type: none; /* unneeded */
+    /* text-transform: uppercase; */
+    /* text-shadow: 1px 0px grey; */
+    /* text-shadow: 1px 1px pink; */
 }
 
 li:hover {
@@ -219,6 +224,8 @@ progress::-webkit-progress-value {
     background-color: #74fedb;
     border-radius: 20px;
     box-shadow: 2px 1px 3px #74fedb;
+    /* box-shadow: 5px 2px 3px rgb(219, 120, 189); */
+
 }
 
 progress:hover {  
@@ -290,6 +297,6 @@ progress:hover {
 @media(max-width: 800px) {
     .player {
         /* box-shadow: none; */
-        margin-right: 20px;
+        margin-right: 15px;
     }
 }
