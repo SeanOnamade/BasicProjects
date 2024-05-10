@@ -7,6 +7,8 @@ html {
 
 #headphones {
     margin-top: 10px;
+    max-height: 260px; /* This will adjust height so that controls and above just line up nicely on my laptop */
+    width: auto; /* "" */
     animation: float 6s ease-in-out infinite;
     animation-play-state: paused;
 }
@@ -55,9 +57,11 @@ h1 {
     /* https://getcssscan.com/css-box-shadow-examples */
 }
 
-img {
+/* img {
     width: 30%;
-}
+} */
+/* The above was made redundant by making image size responsive. */
+/* Additionally, having it at 30% makes the image TINY on smaller resolutions */
 
 #controls {
     border: 1px lightslategray solid;
@@ -298,5 +302,20 @@ progress:hover {
     .player {
         /* box-shadow: none; */
         margin-right: 15px;
+    }
+}
+
+@media(max-width: 376px) { /* makes it look nice on my iPhone */
+    #headphones {
+        height: 200px;
+        width: auto;
+    }
+}
+
+@media(max-width: 374px) { /* allows headphones to shrink responsively below, so as not to overflow */
+    #headphones {
+        max-height: auto;
+        height: auto;
+        width: 70%;
     }
 }
