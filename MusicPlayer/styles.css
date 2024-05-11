@@ -161,12 +161,22 @@ ol {
     padding: 0;
 }
 
+.hyphen {
+    color: #74fedb;
+}
+
 li {
     cursor: pointer;
     padding: 1rem;
     transition: all 0.4s ease;
     border-radius: 10px;
     list-style-type: none; /* unneeded */
+
+    /* display: flex;
+    justify-content: space-between; 
+    align-items: center; */
+    /* possibility for titles on left, artists on right*/
+
     /* text-transform: uppercase; */
     /* text-shadow: 1px 0px grey; */
     /* text-shadow: 1px 1px pink; */
@@ -179,6 +189,12 @@ li:hover {
     animation-play-state: running;
     box-shadow: rgba(240, 46, 170, 0.4) 0px 4px, rgba(240, 46, 170, 0.3) 0px 8px;
     /* box-shadow: 5px 5px blue, 10px 10px red, 15px 15px green; */ /* COOL EFFECT */
+}
+
+li:hover .hyphen {
+    color: rgb(212, 39, 160);
+    font-weight: bold;
+    text-shadow: 1px 1px grey;
 }
 
 @keyframes float2 {
@@ -242,9 +258,22 @@ progress:hover {
 
 #sortToggle {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex-direction: row;
+    /* align-items: center; */
+    justify-content: space-between;
     margin-bottom: 10px;
+}
+
+#searchInput {
+    font-size: 1.4rem;
+    font-weight: bold;
+    /* background: transparent; */
+    padding: 0.8rem 10px;
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 2px 2px 3px rgb(212, 39, 160);
+    border-color: transparent;
+    outline: none;
 }
 
 #toggleButton {
@@ -317,5 +346,16 @@ progress:hover {
         max-height: auto;
         height: auto;
         width: 70%;
+    }
+}
+
+@media(max-width: 487px) { /* allows headphones to shrink responsively below, so as not to overflow */
+    #searchInput {
+        width: 150px; /* Adjust width for smaller screens */
+    }
+    
+    #toggleButton {
+        padding: 0.8rem 1.5rem; /* Adjust padding for smaller screens */
+        font-size: 1.2rem; /* Adjust font size for smaller screens */
     }
 }

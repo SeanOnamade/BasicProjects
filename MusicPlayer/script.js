@@ -8,16 +8,16 @@ const songs = [
     { title: "April 13", artist: "Sean" },
     { title: "April 14", artist: "Sean" },
     { title: "April 15", artist: "Sean" },
-    { title: "Oleana Battle Music -- Pokemon Sword and Shield", artist: "Game Freak" },
+    { title: "Oleana Battle Music - Pokemon Sword and Shield", artist: "Game Freak" },
     { title: "Giorno's Theme (Medieval Style)", artist: "Mystic Zaru" },
     { title: "Faerie's Aire and Death Waltz", artist: "superrainbowderp" },
     { title: "Eccentricity", artist: "Sean" },
-    { title: "Team Fortress 2 -- Upgrade Station", artist: "Valve Studio Orchestra" },
+    { title: "Team Fortress 2 - Upgrade Station", artist: "Valve Studio Orchestra" },
     { title: "TOKYO DRIFT FREESTYLE", artist: "bbno$" },
     { title: "Sniper Remix Number One TF2", artist: "Mastgrr" },
-    { title: "Team Fortress 2 -- Your Team Lost", artist: "Valve Studio Orchestra" },
+    { title: "Team Fortress 2 - Your Team Lost", artist: "Valve Studio Orchestra" },
     { title: "Flame On {Human Torch Song}", artist: "Hitman's Beatmaker and Oll Korrect" },
-    { title: "Level 6 -- City", artist: "Rolling Sky" },
+    { title: "Level 6 - City", artist: "Rolling Sky" },
     { title: "Everywhere At The End Of DaBaby", artist: "ynk" },
     { title: "Playing with Christmas", artist: "Mastgrr" },
     { title: "Wii Theme But It's September", artist: "Mr Rock" },
@@ -40,7 +40,7 @@ const songs = [
     { title: "MissingNo", artist: "TheInnuendo" },
     { title: "Piano Woman", artist: "Pukklez" },
     { title: "One Steady Roll", artist: "Pisk" },
-    { title: "Pokémon Sun and Moon -- Guzma Encounter Music", artist: "Game Freak" },
+    { title: "Pokémon Sun and Moon - Guzma Encounter Music", artist: "Game Freak" },
     { title: "Pokémon XY Theme", artist: "Ben Dixon and The Sad Truth" },
     { title: "Tinkerer Island", artist: "JakeTheDrake" },
     { title: "Song That Might Play When You Fight Sans (Acapella)", artist: "Smooth McGroove, Toby Fox" },
@@ -50,11 +50,11 @@ const songs = [
     { title: "i let my little brother use Fl Studio", artist: "Paerle" },
     { title: "Kindle Kingdom Prediction", artist: "MSM World of Elements, JakeTheDrake" },
     { title: "Not So Bad a Dad", artist: "Olivia Olson" },
-    { title: "Embrace the Unexpected — Opera Rap", artist: "Twist of Fate Wines" },
+    { title: "Embrace the Unexpected - Opera Rap", artist: "Twist of Fate Wines" },
     { title: "Kleptomanie", artist: "Caravan Palace" },
     { title: "Bowgart the Barbarian", artist: "Robert Smith" },
-    { title: "Demoman -- Beggin'", artist: "Seriamon3, Måneskin" },
-    { title: "Floppy Disks -- Five Nights at Freddy's 1 Song", artist: "vaser888, The Living Tombstone" },
+    { title: "Demoman - Beggin'", artist: "Seriamon3, Måneskin" },
+    { title: "Floppy Disks - Five Nights at Freddy's 1 Song", artist: "vaser888, The Living Tombstone" },
     { title: "Floppy Drives - Clint Eastwood", artist: "vaser888, Gorillaz" },
     { title: "Floppy Drives - Lone Digger", artist: "vaser888, Caravan Palace" },
     { title: "Dangerous", artist: "Left Boy, Big Data, Joywave" },
@@ -81,11 +81,15 @@ function createSongList() {
     for (let i = 0; i < sortedSongs.length; i++) {
         const item = document.createElement("li");
         const title = document.createElement("span"); // song title
-        title.textContent = songs[i].title;
+        title.textContent = sortedSongs[i].title;
+        const hyphen = document.createElement("span");
+        hyphen.textContent = " ━ ";
+        hyphen.classList.add("hyphen");
         const artist = document.createElement("span");
-        artist.textContent = ` - ${songs[i].artist}`;
+        artist.textContent = sortedSongs[i].artist;
         // item.appendChild(document.createTextNode(songs[i]));
         item.appendChild(title);
+        item.appendChild(hyphen);
         item.appendChild(artist);
         list.appendChild(item);
     }
@@ -99,6 +103,24 @@ const links = document.querySelectorAll('li, li span:first-child');
 for (const link of links) {
     link.addEventListener('click', setSong)
 }
+
+function filterSongs() {
+    const searchText = document.getElementById("searchInput").value.toLowerCase();
+    const listItems = document.querySelectorAll("#songList li");
+
+    listItems.forEach(item => {
+        const title = item.querySelector("span:first-child").textContent.toLowerCase();
+        const artist = item.querySelector(".hyphen").nextSibling.textContent.toLowerCase();
+        if (title.includes(searchText) || artist.includes(searchText)) {
+            item.style.display = "block";
+        }
+        else {
+            item.style.display = "none";
+        }
+    });
+}
+
+document.getElementById("searchInput").addEventListener("input", filterSongs);
 
 document.querySelector('#currentSong').innerText = "Choose a Song!"
 
