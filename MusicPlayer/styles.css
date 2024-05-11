@@ -262,6 +262,7 @@ progress:hover {
     /* align-items: center; */
     justify-content: space-between;
     margin-bottom: 10px;
+    padding: 20px;
 }
 
 #searchInput {
@@ -332,6 +333,10 @@ progress:hover {
         /* box-shadow: none; */
         margin-right: 15px;
     }
+
+    #sortToggle {
+        padding: auto;
+    }
 }
 
 @media(max-width: 376px) { /* makes it look nice on my iPhone */
@@ -352,10 +357,12 @@ progress:hover {
 @media(max-width: 487px) { /* allows headphones to shrink responsively below, so as not to overflow */
     #searchInput {
         width: 150px; /* Adjust width for smaller screens */
+        margin-left: 10px;
     }
     
     #toggleButton {
         padding: 0.8rem 1.5rem; /* Adjust padding for smaller screens */
         font-size: 1.2rem; /* Adjust font size for smaller screens */
+        margin-right: 10px;
     }
 }
