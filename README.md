@@ -8,24 +8,42 @@ This repository contains many basic projects I've been working on in various lan
 ### 3. [Tic Tac Toe](#tic-tac-toe)
 
 # Dotify - Music Player
-This is a music player app. A user can play and pause songs I've downloaded into a playlist. It's complete with an HTML interface.
+Dotify offers a great music listening experience, providing users (me) with a sleek and intuitive platform to enjoy their (my) favorite tunes. With its stylistic HTML interface, Dotify allows users to effortlessly navigate through a curated playlist, playing and pausing songs at their convenience. Whether one is unwinding after a long day or looking for some inspiration while working, Dotify is a go-to companion for seamless music playback.
+
 
 <p align="center">
-  <img src="https://github.com/SeanOnamade/BasicProjects/assets/100744222/208aec28-976e-4f4d-8587-f3a888ce96f0" width="600">
-  <img src="https://github.com/SeanOnamade/BasicProjects/assets/100744222/acd1c1b6-747d-4d63-9784-dde94bb8f6d4" width="800">
+  <img src="/MusicPlayer/ScreenshotOne.png" width="600">
+  <img src="MusicPlayer/dotifyv2.gif" width="800">
 </p>
 
 <!-- ![musicplayerwalkthrough](https://github.com/SeanOnamade/BasicProjects/assets/100744222/acd1c1b6-747d-4d63-9784-dde94bb8f6d4) -->
 
 ### What did I learn? What challenges were there?
-This was a crash course in simple full-stack development, as well as a side of Javascript I haven't seen before (i.e. its music-playing capabilities). Making this app was a lot of fun, and I sometimes keep the music on as I work or study.
-
-Reviewing event listeners was a bit of a pain. Making the pause/play icon pulse when clicked, and ensuring the progress bar didn't mess up the songs' playback, was also an interesting challenge.
+Developing Dotify was a crash course in simple full-stack development, allowing me to explore JavaScript's capabilities for playing audio. While creating this app, I encountered challenges related to managing event listeners and ensuring smooth playback while interacting with various UI elements. Overall, making this app was a lot of fun;  I sometimes play the music as I work or study.
 
 ### Languages, softwares, and modules used
 - Javascript
 - HTML
 - CSS
+
+### Recent Updates
+Recent enhancements include:
+
+- [x] Added more styling for improved visual appeal
+- [x] Implemented a toggle button for pausing and playing songs (space bar)
+- [x] Enhanced progress and volume bars with additional functionality (arrow keys)
+- [x] Added a scroll effect for the currently playing song
+- [x] Sorting by title/artist
+- [x] Introduced shadow and hover effects for a more interactive experience
+- [x] Improved responsiveness across different devices
+- [x] Expanded the playlist with a diverse selection of songs
+
+<img src="/MusicPlayer/ScreenshotTwo.png" width="600">
+
+### Deployment
+The live version of Dotify is available at [https://seanonamade-dotify.netlify.app/](https://seanonamade-dotify.netlify.app/).
+
+Thank you for checking out Dotify! If you have any feedback or suggestions, feel free to reach out.
 
 ### Run/Install
 
