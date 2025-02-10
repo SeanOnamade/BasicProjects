@@ -92,7 +92,14 @@ const songs = [
     { title: "Lo-Fight - Composer Cover", artist: "Sean, Sock.clip" },
     { title: "Medieval Melody", artist: "Sean" },
     { title: "Off the Perc(ussion)", artist: "Sean" },
-    { title: "Everybody's Circulation", artist: "TMABird" }
+    { title: "Everybody's Circulation", artist: "TMABird" },
+    { title: "The Walker Instrumental", artist: "Sean, Fitz and The Tantrums" },
+    { title: "THOUGHT I WAS DEAD TYPE BEAT", artist: "Tyler, The Creator, Kopia" },
+    { title: "Foolhardy", artist: "Rozebud" },
+    { title: "Gibberish!!", artist: "coal bones" },
+    { title: "Uncanny Valley v2", artist: "Saruky" },
+    { title: "Seasonal Shanty but Freegle Forced 7 More Seasonals to Party", artist: "Sean, Others" },
+    { title: "Africalypso", artist: "Lagbaja" }
 ].sort((a, b) => a.title.localeCompare(b.title));
 
 // https://www.textfixer.com/tools/alphabetical-order.php
