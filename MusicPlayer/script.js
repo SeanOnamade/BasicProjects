@@ -107,6 +107,85 @@ const songs = [
 const player = document.getElementById("player")
 let sortByTitle = true;
 
+let queue = [];
+let currentQueueIndex = -1;
+
+function addToQueue(song) {
+    queue.push(song);
+    renderQueue();
+}
+
+function removeFromQueue(index) {
+    queue.splice(index, 1);
+    if (index < currentQueueIndex) {
+        currentQueueIndex--;
+    } else if (index === currentQueueIndex) {
+        currentQueueIndex = -1;
+    }
+    renderQueue();
+}
+
+function clearQueue() {
+    queue = [];
+    currentQueueIndex = -1;
+    renderQueue();
+}
+
+function playFromQueue(index) {
+    if (index < 0 || index >= queue.length) return;
+    currentQueueIndex = index;
+    const song = queue[currentQueueIndex];
+    playSong(song.title, song.artist);
+    renderQueue();
+}
+
+function playNext() {
+    if (currentQueueIndex < queue.length - 1) {
+        playFromQueue(currentQueueIndex + 1);
+    }
+}
+
+function playPrevious() {
+    // if more than 3 seconds in, restart; otherwise go to previous
+    if (player.currentTime > 3) {
+        player.currentTime = 0;
+    } else if (currentQueueIndex > 0) {
+        playFromQueue(currentQueueIndex - 1);
+    }
+}
+
+function renderQueue() {
+    const queueList = document.getElementById("queueList");
+    queueList.innerHTML = '';
+    if (queue.length === 0) {
+        queueList.innerHTML = '<hr class="queue-divider">';
+        return;
+    }
+    const ol = document.createElement("ol");
+    queue.forEach((song, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${song.title} - ${song.artist}`;
+
+        if (index === currentQueueIndex) {
+            li.classList.add("now-playing");
+        }
+        li.addEventListener("click", () => playFromQueue(index));
+        const removeBtn = document.createElement("button");
+        removeBtn.textContent = "✕";
+        removeBtn.classList.add("remove-from-queue-btn");
+        removeBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            removeFromQueue(index);
+        });
+        li.appendChild(removeBtn);
+        ol.appendChild(li);
+    });
+    queueList.appendChild(ol);
+    const divider = document.createElement("hr");
+    divider.classList.add("queue-divider");
+    queueList.appendChild(divider);
+}
+
 function createSongList() {
     const sortedSongs = songs.sort(sortSongs);
     const list = document.createElement("ol");
@@ -121,10 +200,21 @@ function createSongList() {
         const artist = document.createElement("span");
         artist.textContent = sortedSongs[i].artist;
         // item.appendChild(document.createTextNode(songs[i]));
+
+        const addBtn = document.createElement("button");
+        addBtn.textContent = "+";
+        addBtn.classList.add("add-to-queue-btn");
+        addBtn.title = "Add to Queue";
+        addBtn.addEventListener("click", function(e) {
+            e.stopPropagation();
+            addToQueue( {title: sortedSongs[i].title, artist: sortedSongs[i].artist})
+        });
+        
         item.appendChild(title);
         item.appendChild(hyphen);
         item.appendChild(artist);
         list.appendChild(item);
+        item.appendChild(addBtn);
     }
     return list;
 }
@@ -132,7 +222,7 @@ function createSongList() {
 const songList = document.getElementById("songList")
 songList.appendChild(createSongList());
 
-const links = document.querySelectorAll('li, li span:first-child');
+const links = document.querySelectorAll('#songList li');
 for (const link of links) {
     link.addEventListener('click', setSong)
 }
@@ -157,30 +247,47 @@ document.getElementById("searchInput").addEventListener("input", filterSongs);
 
 document.querySelector('#currentSong').innerText = "Choose a Song!"
 
+function playSong(songTitle, songArtist) {
+    document.querySelector("#headphones").classList.remove("pulse");
+    const source = document.getElementById("source");
+    source.src = "songs/" + songTitle + ".mp3";
+
+    document.querySelector("#currentSong").innerText = `Now Playing: ${songTitle} ${songArtist}`;
+    player.load();
+    player.play();
+    document.querySelector("#currentSong").classList.remove("paused");
+    document.querySelector("#headphones").style.animationPlayState = "running";
+    document.querySelector("#currentSong").style.fontStyle = "italic";
+    document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
+    document.querySelector("#headphones").classList.add("pulse");
+}
+
 function setSong(e) {
     // console.log(e);
-    document.querySelector("#headphones").classList.remove("pulse"); /* May be outdated now */
-    const source = document.getElementById("source");
+    // document.querySelector("#headphones").classList.remove("pulse"); /* May be outdated now */
+    // const source = document.getElementById("source");
 
     const targetLi = e.target.tagName === 'SPAN' ? e.target.parentElement : e.target;
     const songTitle = targetLi.querySelector('span:first-child').textContent;
-    const songArtist = targetLi.querySelector('span:last-child').textContent;
+    const songArtist = targetLi.querySelector('span:last-of-type').textContent;
 
     // const maxTitleLength = 35;
     // const truncatedTitle = songTitle.length > maxTitleLength ? songTitle.substring(0, maxTitleLength) + "..." : songTitle;
     // source.src = "songs/" + e.target.innerText;
-    source.src = "songs/" + songTitle + ".mp3";
+    // source.src = "songs/" + songTitle + ".mp3";
 
-    document.querySelector('#currentSong').innerText = `Now Playing: ${songTitle} ${songArtist}`;
-    // no hypen needed because artist.textContent = ` - ${songs[i].artist}`;
+    // document.querySelector('#currentSong').innerText = `Now Playing: ${songTitle} ${songArtist}`;
+    // // no hypen needed because artist.textContent = ` - ${songs[i].artist}`;
 
-    player.load();
-    player.play();
-    document.querySelector('#currentSong').classList.remove("paused");
-    document.querySelector('#headphones').style.animationPlayState = "running";
-    document.querySelector('#currentSong').style.fontStyle = 'italic';
-    document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
-    document.querySelector("#headphones").classList.add("pulse");
+    // player.load();
+    // player.play();
+    // document.querySelector('#currentSong').classList.remove("paused");
+    // document.querySelector('#headphones').style.animationPlayState = "running";
+    // document.querySelector('#currentSong').style.fontStyle = 'italic';
+    // document.getElementById("playPauseIcon").innerHTML = "&#10074;&#10074;";
+    // document.querySelector("#headphones").classList.add("pulse");
+
+    playSong(songTitle, songArtist);
 }
 
 function togglePlayPause() {
@@ -265,13 +372,27 @@ function updateProgress() {
     }
 }
 
+// player.addEventListener('ended', function() {
+//     var currentSong = document.querySelector('#currentSong');
+//     currentSong.innerText = "Choose a Song!";
+//     currentSong.style.fontStyle = 'normal';
+//     currentSong.classList.add("paused");
+//     document.querySelector('#headphones').style.animationPlayState = "paused";
+//     document.getElementById("playPauseIcon").innerHTML = "&#9658;";
+// });
+
 player.addEventListener('ended', function() {
+    if (currentQueueIndex < queue.length - 1) {
+        playNext();
+    } else {
+    // end of queue
     var currentSong = document.querySelector('#currentSong');
     currentSong.innerText = "Choose a Song!";
     currentSong.style.fontStyle = 'normal';
     currentSong.classList.add("paused");
     document.querySelector('#headphones').style.animationPlayState = "paused";
     document.getElementById("playPauseIcon").innerHTML = "&#9658;";
+    }
 });
 
 const progressBar = document.getElementById("progress");
@@ -302,7 +423,7 @@ function toggleSort() {
     }
     songList.innerHTML = ''; // recreates the list with new sorting
     songList.appendChild(createSongList());
-    const links = document.querySelectorAll('li, li span:first-child');
+    const links = document.querySelectorAll('#songList li');
     for (const link of links) {
         link.addEventListener('click', setSong)
     }
@@ -378,5 +499,5 @@ player.addEventListener('error', function(event) { // does this work?
     alert('An error occurred during playback. Please try again later.');
 });
 
-
+renderQueue();
 

@@ -366,3 +366,123 @@ progress:hover {
         margin-right: 10px;
     }
 }
+
+.now-playing {
+    font-weight: bold;
+    color: #74fedb;
+    text-shadow: 1px 1px rgba(212, 39, 160, 0.6);
+}
+
+.add-to-queue-btn {
+    background: rgba(212, 39, 160, 0.2);
+    border: 1px solid rgba(212, 39, 160, 0.4);
+    cursor: pointer;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-left: 10px;
+    min-width: 2.8rem;
+    min-height: 2.8rem;
+    padding: 0.4rem;
+    color: rgb(240, 130, 200);
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    vertical-align: middle;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.add-to-queue-btn:hover {
+    background: rgb(212, 39, 160);
+    color: white;
+    box-shadow: 0 0 8px rgba(212, 39, 160, 0.5);
+    transform: scale(1.15);
+}
+
+.remove-from-queue-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    margin-left: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: all 0.3s ease;
+}
+
+.remove-from-queue-btn:hover {
+    color: rgb(240, 46, 170);
+}
+
+#queueControls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+#queueControls button {
+    padding: 0.6rem 1.5rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+    background-color: rgba(116, 254, 219, 0.15);
+    color: #74fedb;
+    border: 1px solid rgba(116, 254, 219, 0.3);
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#queueControls button:hover {
+    background-color: #74fedb;
+    color: #2a123e;
+    box-shadow: 2px 2px 3px rgba(132, 187, 198, 0.5);
+}
+
+#queueSection {
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 1.5rem;
+    padding: 1.2rem 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid rgba(116, 254, 219, 0.08);
+}
+
+#queueSection h2 {
+    margin-top: 0.5rem;
+}
+
+#queueList ol {
+    margin: 0;
+    padding: 0;
+}
+
+#queueList li {
+    padding: 0.8rem 1.2rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    opacity: 0.6;
+    border-bottom: 1px solid rgba(116, 254, 219, 0.07);
+    color: whitesmoke;
+}
+
+#queueList li:hover {
+    background: rgba(212, 39, 160, 0.15);
+    box-shadow: rgba(212, 39, 160, 0.3) 0px 2px, rgba(212, 39, 160, 0.15) 0px 4px;
+    opacity: 1;
+    color: whitesmoke;
+    animation: none;
+    transform: none;
+}
+
+#queueList li.now-playing {
+    opacity: 1;
+    background: linear-gradient(90deg, rgba(116, 254, 219, 0.12), rgba(212, 39, 160, 0.1));
+    border-left: 3px solid #74fedb;
+}
+
+.queue-divider {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(116, 254, 219, 0.3), rgba(212, 39, 160, 0.3), transparent);
+    margin: 0.5rem 2rem 1.2rem;
+}
