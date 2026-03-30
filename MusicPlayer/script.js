@@ -103,7 +103,7 @@ const songs = [
     { title: "Wrong Timing, Inst", artist: "YOGA" },
     { title: "the things you say to me", artist: "POODEE" },
     { title: "badabada", artist: "POODEE" },
-    { title: "KABOOM_ Madness Vandalization _ FNF Mod", artist: "bb-panzu" }
+    { title: "KABOOM", artist: "bb-panzu" }
 ].sort((a, b) => a.title.localeCompare(b.title));
 
 // https://www.textfixer.com/tools/alphabetical-order.php
@@ -256,7 +256,7 @@ function playSong(songTitle, songArtist) {
     const source = document.getElementById("source");
     source.src = "songs/" + songTitle + ".mp3";
 
-    document.querySelector("#currentSong").innerText = `Now Playing: ${songTitle} ${songArtist}`;
+    document.querySelector("#currentSong").innerText = `Now Playing: ${songTitle} - ${songArtist}`;
     player.load();
     player.play();
     document.querySelector("#currentSong").classList.remove("paused");
