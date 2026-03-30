@@ -99,7 +99,11 @@ const songs = [
     { title: "Gibberish!!", artist: "coal bones" },
     { title: "Uncanny Valley v2", artist: "Saruky" },
     { title: "Seasonal Shanty but Freegle Forced 7 More Seasonals to Party", artist: "Sean, Others" },
-    { title: "Africalypso", artist: "Lagbaja" }
+    { title: "Africalypso", artist: "Lagbaja" },
+    { title: "Wrong Timing, Inst", artist: "YOGA" },
+    { title: "the things you say to me", artist: "POODEE" },
+    { title: "badabada", artist: "POODEE" },
+    { title: "KABOOM_ Madness Vandalization _ FNF Mod", artist: "bb-panzu" }
 ].sort((a, b) => a.title.localeCompare(b.title));
 
 // https://www.textfixer.com/tools/alphabetical-order.php
