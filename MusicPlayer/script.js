@@ -129,6 +129,25 @@ function removeFromQueue(index) {
     renderQueue();
 }
 
+function moveQueueItem(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+    if (fromIndex < 0 || fromIndex >= queue.length) return;
+    toIndex = Math.max(0, Math.min(toIndex, queue.length - 1));
+
+    const [item] = queue.splice(fromIndex, 1);
+    queue.splice(toIndex, 0, item);
+
+    if (currentQueueIndex === fromIndex) {
+        currentQueueIndex = toIndex;
+    } else if (fromIndex < currentQueueIndex && toIndex >= currentQueueIndex) {
+        currentQueueIndex--;
+    } else if (fromIndex > currentQueueIndex && toIndex <= currentQueueIndex) {
+        currentQueueIndex++;
+    }
+
+    renderQueue();
+}
+
 function clearQueue() {
     queue = [];
     currentQueueIndex = -1;
@@ -158,6 +177,151 @@ function playPrevious() {
     }
 }
 
+let queueDragState = null;
+let queueDragJustFinished = false;
+
+function getPlaceholderQueueIndex() {
+    const ol = document.querySelector("#queueList ol");
+    if (!ol || !queueDragState?.placeholder) return queueDragState?.fromIndex ?? 0;
+
+    let index = 0;
+    for (const child of ol.children) {
+        if (child === queueDragState.placeholder) {
+            return index;
+        }
+        if (child.classList.contains("queue-drag-source-hidden")) {
+            continue;
+        }
+        index++;
+    }
+    return index;
+}
+
+function updateQueuePlaceholder(clientY) {
+    const ol = document.querySelector("#queueList ol");
+    if (!ol || !queueDragState?.placeholder) return;
+
+    const items = [...ol.querySelectorAll("li:not(.queue-drag-source-hidden)")];
+    let insertBefore = null;
+
+    for (const item of items) {
+        if (item === queueDragState.placeholder) continue;
+        const rect = item.getBoundingClientRect();
+        const mid = rect.top + rect.height / 2;
+        if (clientY < mid) {
+            insertBefore = item;
+            break;
+        }
+    }
+
+    if (insertBefore) {
+        ol.insertBefore(queueDragState.placeholder, insertBefore);
+    } else {
+        ol.appendChild(queueDragState.placeholder);
+    }
+
+    queueDragState.overIndex = getPlaceholderQueueIndex();
+}
+
+function positionQueueDragGhost(clientX, clientY) {
+    if (!queueDragState?.ghost) return;
+    queueDragState.ghost.style.left = `${clientX - queueDragState.offsetX}px`;
+    queueDragState.ghost.style.top = `${clientY - queueDragState.offsetY}px`;
+}
+
+function onQueueDragMove(event) {
+    if (!queueDragState) return;
+
+    queueDragState.didMove = true;
+    positionQueueDragGhost(event.clientX, event.clientY);
+    updateQueuePlaceholder(event.clientY);
+}
+
+function cleanupQueueDragElements() {
+    if (!queueDragState) return;
+
+    queueDragState.ghost?.remove();
+    queueDragState.placeholder?.remove();
+
+    if (queueDragState.li) {
+        queueDragState.li.style.display = "";
+        queueDragState.li.classList.remove("queue-drag-source-hidden");
+    }
+}
+
+function endQueueDrag(event) {
+    if (!queueDragState) return;
+
+    const { fromIndex, handleEl, pointerId, didMove } = queueDragState;
+    if (handleEl.hasPointerCapture(pointerId)) {
+        handleEl.releasePointerCapture(pointerId);
+    }
+
+    document.removeEventListener("pointermove", onQueueDragMove);
+    document.removeEventListener("pointerup", endQueueDrag);
+    document.removeEventListener("pointercancel", endQueueDrag);
+    document.getElementById("queueList").classList.remove("queue-dragging");
+
+    const finalIndex = getPlaceholderQueueIndex();
+    cleanupQueueDragElements();
+
+    if (didMove && finalIndex !== fromIndex) {
+        moveQueueItem(fromIndex, finalIndex);
+    } else {
+        renderQueue();
+    }
+
+    queueDragJustFinished = didMove;
+    queueDragState = null;
+    if (queueDragJustFinished) {
+        setTimeout(() => { queueDragJustFinished = false; }, 0);
+    }
+}
+
+function startQueueDrag(index, event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const li = event.currentTarget.closest("li");
+    const rect = li.getBoundingClientRect();
+    const ol = li.parentNode;
+
+    const ghost = li.cloneNode(true);
+    ghost.classList.add("queue-drag-ghost");
+    ghost.classList.remove("now-playing");
+    ghost.style.width = `${rect.width}px`;
+    document.body.appendChild(ghost);
+
+    const placeholder = document.createElement("li");
+    placeholder.classList.add("queue-drag-placeholder");
+    placeholder.style.height = `${rect.height}px`;
+    ol.insertBefore(placeholder, li);
+
+    li.classList.add("queue-drag-source-hidden");
+    li.style.display = "none";
+
+    queueDragState = {
+        fromIndex: index,
+        overIndex: index,
+        handleEl: event.currentTarget,
+        pointerId: event.pointerId,
+        didMove: false,
+        ghost,
+        placeholder,
+        li,
+        offsetX: event.clientX - rect.left,
+        offsetY: event.clientY - rect.top,
+    };
+
+    positionQueueDragGhost(event.clientX, event.clientY);
+    event.currentTarget.setPointerCapture(event.pointerId);
+    document.getElementById("queueList").classList.add("queue-dragging");
+
+    document.addEventListener("pointermove", onQueueDragMove);
+    document.addEventListener("pointerup", endQueueDrag);
+    document.addEventListener("pointercancel", endQueueDrag);
+}
+
 function renderQueue() {
     const queueList = document.getElementById("queueList");
     queueList.innerHTML = '';
@@ -168,12 +332,25 @@ function renderQueue() {
     const ol = document.createElement("ol");
     queue.forEach((song, index) => {
         const li = document.createElement("li");
-        li.textContent = `${song.title} - ${song.artist}`;
+
+        const dragHandle = document.createElement("span");
+        dragHandle.classList.add("queue-drag-handle");
+        dragHandle.textContent = "⠿";
+        dragHandle.title = "Drag to reorder";
+        dragHandle.addEventListener("pointerdown", (e) => startQueueDrag(index, e));
+
+        const label = document.createElement("span");
+        label.classList.add("queue-item-label");
+        label.textContent = `${song.title} - ${song.artist}`;
 
         if (index === currentQueueIndex) {
             li.classList.add("now-playing");
         }
-        li.addEventListener("click", () => playFromQueue(index));
+        li.addEventListener("click", () => {
+            if (queueDragJustFinished) return;
+            playFromQueue(index);
+        });
+
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "✕";
         removeBtn.classList.add("remove-from-queue-btn");
@@ -181,6 +358,9 @@ function renderQueue() {
             e.stopPropagation();
             removeFromQueue(index);
         });
+
+        li.appendChild(dragHandle);
+        li.appendChild(label);
         li.appendChild(removeBtn);
         ol.appendChild(li);
     });
@@ -400,20 +580,53 @@ player.addEventListener('ended', function() {
 });
 
 const progressBar = document.getElementById("progress");
-let isDragging = false;
+let isDraggingProgress = false;
 let wasPlayingBeforeDrag = false;
+let progressTouchMoveHandler = null;
 
 function moveProgressBar(event) {
-    const rect = progressBar.getBoundingClientRect(); // gets size and element
-    const totalWidth = rect.width; // gets width
-    const offsetX = event.clientX - rect.left; // this gets the mouse's ("event's") horizontal position
-    // relative to the left edge of the progress bar
+    if (!isDraggingProgress || !player.duration) return;
 
-    const progressPercentage = offsetX / totalWidth; // calculates progress based on event's position
-    
-    // update the playback based on progress percentage
-    const newTime = player.duration * progressPercentage;
-    player.currentTime = newTime;
+    const rect = progressBar.getBoundingClientRect();
+    const totalWidth = rect.width;
+    const offsetX = Math.max(0, Math.min(event.clientX - rect.left, totalWidth));
+    const progressPercentage = offsetX / totalWidth;
+
+    player.currentTime = player.duration * progressPercentage;
+}
+
+function onProgressDragMove(event) {
+    moveProgressBar(event);
+}
+
+function onProgressTouchMove(event) {
+    if (!isDraggingProgress) return;
+    event.preventDefault();
+    moveProgressBar(event.touches[0]);
+}
+
+function startProgressDrag(event) {
+    isDraggingProgress = true;
+    wasPlayingBeforeDrag = !player.paused;
+    player.pause();
+    moveProgressBar(event);
+    document.addEventListener("mousemove", onProgressDragMove);
+    progressTouchMoveHandler = onProgressTouchMove;
+    document.addEventListener("touchmove", progressTouchMoveHandler, { passive: false });
+}
+
+function stopProgressDrag() {
+    if (!isDraggingProgress) return;
+
+    if (wasPlayingBeforeDrag) {
+        player.play();
+    }
+    isDraggingProgress = false;
+    document.removeEventListener("mousemove", onProgressDragMove);
+    if (progressTouchMoveHandler) {
+        document.removeEventListener("touchmove", progressTouchMoveHandler);
+        progressTouchMoveHandler = null;
+    }
 }
 
 function toggleSort() {
@@ -444,59 +657,17 @@ function sortSongs(a, b) {
 
 document.getElementById("toggleButton").addEventListener('click', toggleSort);
 
-progressBar.addEventListener('mousedown', function(event) { // mousedown = clicking
-    isDragging = true;
-    wasPlayingBeforeDrag = !player.paused;
-    player.pause();
-    moveProgressBar(event); // update when dragging starts
-    document.addEventListener('mousemove', moveProgressBar); // update continuously while dragging
+progressBar.addEventListener("mousedown", function(event) {
+    event.preventDefault();
+    startProgressDrag(event);
 });
 
-progressBar.addEventListener('touchstart', function(event) { // touchscreen devices
-    isDragging = true;
-    wasPlayingBeforeDrag = !player.paused;
-    player.pause();
-    moveProgressBar(event.touches[0]); // jump immediately upon touching
-    document.addEventListener('touchmove', function(touchEvent) {
-        moveProgressBar(touchEvent.touches[0]); // first touch (touches[0]) is argument
-    });
-});
+progressBar.addEventListener("touchstart", function(event) {
+    startProgressDrag(event.touches[0]);
+}, { passive: true });
 
-function stopDragging() {
-    if (wasPlayingBeforeDrag) {
-        player.play();
-    }
-    isDragging = false;
-    document.removeEventListener('mousemove', moveProgressBar);
-    document.removeEventListener('touchmove', moveProgressBar);
-}
-
-// document.addEventListener('mouseup', stopDragging);
-// document.addEventListener('touchend', stopDragging);
-
-document.addEventListener('mouseup', function() {
-    if (isDragging) {
-        stopDragging();
-    }
-});
-
-document.addEventListener('touchend', function() {
-    if (isDragging) {
-        stopDragging();
-    }
-}); // using the commented code above for mouseup and touchend cause the bug. I guess the
-    // problem was that it didn't check for isDragging. isDragging must only be called when dragging
-    // is in progress. Without this check, the stopDragging function would be called unconditionally 
-    // whenever a mouseup or touchend event occurs, regardless of whether dragging was actually happening.
-    // this means that stopDragging() will continuously play the player.
-
-// document.addEventListener('mouseup', function() {
-//     document.removeEventListener('mousemove', moveProgressBar);
-// });
-
-// document.addEventListener('touched', function() {
-//     document.removeEventListener('mousemove', moveProgressBar);
-// });
+document.addEventListener("mouseup", stopProgressDrag);
+document.addEventListener("touchend", stopProgressDrag);
 
 player.addEventListener('error', function(event) { // does this work?
     console.error('Error occurred:', event);
