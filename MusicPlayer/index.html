@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="icon" type="image/svg+xml" href="headphones.svg"> -->
     <link rel="icon" type="image/png" href="headphones2.png">
     <title>Music Player!</title>
 
@@ -11,20 +10,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Protest+Strike&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Spectral:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <div class = "player">
+    <div class="player">
         <img src="headphones2.png" alt="headphones image!" id="headphones"/>
         <h1 class="header-text">Dot-Ify V2</h1>
-        <audio id = "player" ontimeupdate="updateProgress()">
-            <source id = "source"/>
+        <audio id="player">
+            <source id="source"/>
             Audio not supported!
-        </audio>    
+        </audio>
 
         <progress id="progress" value="0" max="100"></progress>
         <div id="timeDisplay"></div>
@@ -32,7 +29,7 @@
         <div id="controls">
             <p id="currentSong"></p>
             <div class="controls_wrapper">
-                <span id="playPauseIcon" onclick="togglePlayPause()">&#9658;</span>
+                <span id="playPauseIcon">&#9658;</span>
             </div>
             <p>Volume:</p>
             <div class="volume">
@@ -45,9 +42,9 @@
         <div id="queueSection">
             <h2>Queue</h2>
             <div id="queueControls">
-                <button id="prevBtn" onclick="playPrevious()">&#9664;&#9664;</button>
-                <button id="nextBtn" onclick="playNext()">&#9654;&#9654;</button>
-                <button id="clearBtn" onclick="clearQueue()">Clear Queue</button>
+                <button id="prevBtn">&#9664;&#9664;</button>
+                <button id="nextBtn">&#9654;&#9654;</button>
+                <button id="clearBtn">Clear Queue</button>
             </div>
             <div id="queueList"></div>
         </div>
@@ -57,10 +54,15 @@
             <button id="toggleButton">Sort by Artist</button>
             <input type="text" id="searchInput" placeholder="Search for a song...">
         </div>
-        <div id = "songList">
+        <div id="songList">
         </div>
     </div>
-    <script src="script.js"></script>
-    
+
+    <script src="js/data.js"></script>
+    <script src="js/playback.js"></script>
+    <script src="js/queue.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+
 </body>
 </html>

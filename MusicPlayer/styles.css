@@ -120,6 +120,16 @@ h1 {
     transform: translateX(0) !important; /**/
 }
 
+/* A song is loaded/active (replaces the old inline font-style) */
+#currentSong.active {
+    font-style: italic;
+}
+
+/* Headphones float while audio is playing (replaces inline animation-play-state) */
+#headphones.playing {
+    animation-play-state: running;
+}
+
 #currentSong:hover {
     animation-play-state: paused;
 }
