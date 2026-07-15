@@ -103,7 +103,8 @@ const songs = [
     { title: "Wrong Timing, Inst", artist: "YOGA" },
     { title: "the things you say to me", artist: "POODEE" },
     { title: "badabada", artist: "POODEE" },
-    { title: "KABOOM", artist: "bb-panzu" }
+    { title: "KABOOM", artist: "bb-panzu" },
+    { title: "Dogs Down", artist: "Condard" }
 ].sort((a, b) => a.title.localeCompare(b.title));
 
 // https://www.textfixer.com/tools/alphabetical-order.php
