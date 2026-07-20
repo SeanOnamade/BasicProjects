@@ -108,7 +108,8 @@ const SONGS = [
     { title: "badabada", artist: "POODEE" },
     { title: "KABOOM", artist: "bb-panzu" },
     { title: "Dogs Down", artist: "Condard" },
-    { title: "Phrygian House Etude", artist: "Leon T" }
+    { title: "Phrygian House Etude", artist: "Leon T" },
+    { title: "Recurrence", artist: "Juleus Cornileus" }
 ].map((song) => ({
     ...song,
     id: song.title,
